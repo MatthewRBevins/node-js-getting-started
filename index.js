@@ -136,15 +136,8 @@ function getPossibleRegions(time, startingRegion, closestRegions) {
 }
 
 const express = require('express')
-const path = require('path')
+const patth = require('path')
 const PORT = process.env.PORT || 5000
-
-express()
-  .use(express.static(path.join(__dirname, 'public')))
-  .set('views', path.join(__dirname, 'views'))
-  .set('view engine', 'ejs')
-  .get('/', (req, res) => res.render('pages/index'))
-  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
 let pos1 = new LatLng([47.545130, -122.137246])//new LatLng(prompt('Enter position: ').replaceAll("(","").replaceAll(")","").split(","))
 let pos2 = new LatLng([47.609165, -122.339078])//new LatLng(prompt('Enter to go: ').replaceAll("(","").replaceAll(")","").split(","))
@@ -188,3 +181,9 @@ while (low > 5 && times < 3) {
 }
 console.log(bestPath)
 ////console.log(low)
+express()
+  .use(express.static(patth.join(__dirname, 'public')))
+  .set('views', patth.join(__dirname, 'views'))
+  .set('view engine', 'ejs')
+  .get('/', (req, res) => res.send(bestPath))
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
