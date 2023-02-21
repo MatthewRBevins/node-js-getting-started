@@ -3,7 +3,6 @@ const newRoutes = require(__dirname + '/jsons/newRoutes.json')
 const newTrips = require(__dirname + '/jsons/newTrips.json')
 const regions = require(__dirname + '/jsons/fullRegions.json').regions
 const fs = require('fs')
-const prompt = require('prompt-sync')()
 const regionSide = 67
 //git commit -am "hi"
 
