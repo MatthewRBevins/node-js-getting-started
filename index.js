@@ -166,22 +166,26 @@ function doTheThing(time, pos1, pos2) {
         ////console.log("***" + tester)
         ////console.log(r.map(x=>x.region).length);
         low = Infinity
+        let ii = 0;
         for (let i of r) {
-            //console.log("ii")
+            ii++;
             path.push(i)
             if (checkRegionDistance(i.region,region2) <= low) {
                 low = checkRegionDistance(i.region,region2)
+                console.log(low);
                 bestPath = path.slice()
                 region1 = i.region
             }
-            for (let j of getPossibleRegions(i.time, i.region, false)) {
-                path.push(j)
-                if (checkRegionDistance(j.region,region2) < low) {
-                    bestPath = path.slice()
-                    region1 = j.region
-                    low = checkRegionDistance(j.region,region2)
+            if (r.length < 10000) {
+                for (let j of getPossibleRegions(i.time, i.region, false)) {
+                    path.push(j)
+                    if (checkRegionDistance(j.region,region2) < low) {
+                        bestPath = path.slice()
+                        region1 = j.region
+                        low = checkRegionDistance(j.region,region2)
+                    }
+                    path.pop()
                 }
-                path.pop()
             }
             path.pop()
         }
