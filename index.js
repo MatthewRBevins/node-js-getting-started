@@ -157,7 +157,7 @@ function doTheThing(time, pos1, pos2) {
     let times = 0
     let path = []
     let bestPath = []
-    while (low > 5 && times < 3) {
+    while (low > 3 && times < 3) {
         path = bestPath.slice()
         times++
         console.log('a')
@@ -176,7 +176,7 @@ function doTheThing(time, pos1, pos2) {
                 bestPath = path.slice()
                 region1 = i.region
             }
-            if (r.length < 10000) {
+            if (low > 5 && r.length < 9000) {
                 for (let j of getPossibleRegions(i.time, i.region, false)) {
                     path.push(j)
                     if (checkRegionDistance(j.region,region2) < low) {
@@ -196,6 +196,7 @@ function doTheThing(time, pos1, pos2) {
         path: bestPath
     }
 }
+
 //////console.log(low)
 express()
   .use(express.static(patth.join(__dirname, 'public')))
