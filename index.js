@@ -5,6 +5,7 @@ const regions = require(__dirname + '/jsons/fullRegions.json').regions
 const fs = require('fs')
 const regionSide = 67
 //git commit -am "hi"
+//heroku logs --tail
 
 function getClosestRegions(region, immediateReturn) {
     //bottom, top, left, right
@@ -87,7 +88,6 @@ var timees = 0;
 
 function getPossibleRegions(time, startingRegion, closestRegions) {
     timees++;
-    console.log(timees);
     let arr = []
     let regionsToCheck = [startingRegion.toString()]
     if (closestRegions) {
@@ -108,9 +108,9 @@ function getPossibleRegions(time, startingRegion, closestRegions) {
                             let startingTime = null
                             let startingStop = null
                             for (let k of newTrips[j.id].stops) {
-                                if (k.region == parseInt(startingRegion)) {
-                                    startingTime = k.time
-                                    startingStop = k.stop_id
+                                if (k.r == parseInt(startingRegion)) {
+                                    startingTime = k.t
+                                    startingStop = k.s
                                     hasReached = true
                                 }
                                 if (hasReached) {
@@ -120,9 +120,9 @@ function getPossibleRegions(time, startingRegion, closestRegions) {
                                         startStop: startingStop,
                                         route: i,
                                         trip: j.id,
-                                        time: k.time,
-                                        stop: k.stop_id,
-                                        region: k.region
+                                        time: k.t,
+                                        stop: k.s,
+                                        region: k.r
                                     })
                                 }
                             }
