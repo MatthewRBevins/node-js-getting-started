@@ -136,9 +136,15 @@ function getPossibleRegions(time, startingRegion, closestRegions) {
 }
 
 const express = require('express')
-const app = express()
-app.get('/', (req,res) => res.send('Hello World!'))
-app.listen(3000, () => console.log('listening'))
+const path = require('path')
+const PORT = process.env.PORT || 5000
+
+express()
+  .use(express.static(path.join(__dirname, 'public')))
+  .set('views', path.join(__dirname, 'views'))
+  .set('view engine', 'ejs')
+  .get('/', (req, res) => res.render('pages/index'))
+  .listen(PORT, () => console.log(`Listening on ${ PORT }`))
 
 let pos1 = new LatLng([47.545130, -122.137246])//new LatLng(prompt('Enter position: ').replaceAll("(","").replaceAll(")","").split(","))
 let pos2 = new LatLng([47.609165, -122.339078])//new LatLng(prompt('Enter to go: ').replaceAll("(","").replaceAll(")","").split(","))
