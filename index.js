@@ -160,7 +160,7 @@ function doTheThing(time, pos1, pos2) {
     while (low > 5 && times < 3) {
         path = bestPath.slice()
         times++
-        //////console.log('a')
+        console.log('a')
         let r = getPossibleRegions(time, region1, true)
         console.log(r.length);
         ////console.log("***" + tester)
