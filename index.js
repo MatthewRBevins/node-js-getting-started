@@ -25,7 +25,7 @@ function getClosestRegions(region, immediateReturn) {
         }
         hasClosest = arr.filter(val => newRegions[val] != null).length != 0
     }
-    ////console.log(arr);
+    //////console.log(arr);
     return arr.filter(val => newRegions[val] != null)
 }
 
@@ -88,15 +88,19 @@ var timees = 0;
 
 function getPossibleRegions(time, startingRegion, closestRegions) {
     timees++;
+    //console.log("FJJWOIJPOIJOIPJ")
     let arr = []
     let regionsToCheck = [startingRegion.toString()]
     if (closestRegions) {
         regionsToCheck = regionsToCheck.concat(getClosestRegions(parseInt(startingRegion), false))
     }
+    //console.log(regionsToCheck);
     for (let startingRegion of regionsToCheck) {
         //Loop through all of the routes that go through starting regions
         if (newRegions[startingRegion] != null) {
+            //console.log(newRegions[startingRegion].routes);
             for (let i of newRegions[startingRegion].routes) {
+                //console.log("JIO")
                 //Loop through every trip of current route
                 for (let j of newRoutes[i].trips) {
                     //If the current trip takes place at the current time
@@ -139,51 +143,62 @@ const express = require('express')
 const patth = require('path')
 const PORT = process.env.PORT || 5000
 
-let pos1 = new LatLng([47.545130, -122.137246])//new LatLng(prompt('Enter position: ').replaceAll("(","").replaceAll(")","").split(","))
-let pos2 = new LatLng([47.609165, -122.339078])//new LatLng(prompt('Enter to go: ').replaceAll("(","").replaceAll(")","").split(","))
-let region1 = pos1.checkRegion() //1125
-//console.log(region1);
-let region2 = pos2.checkRegion()
-let time = getFormattedTime()
-let low = Infinity
-////console.log(region1 + " TO " + region2)
-let times = 0
-let path = []
-let bestPath = []
-while (low > 5 && times < 3) {
-    path = bestPath.slice()
-    times++
-    ////console.log('a')
-    let r = getPossibleRegions("9:00:00", region1, true)
-    console.log(r.length);
-    //console.log("***" + tester)
-    //console.log(r.map(x=>x.region).length);
-    low = Infinity
-    for (let i of r) {
-        path.push(i)
-        if (checkRegionDistance(i.region,region2) <= low) {
-            low = checkRegionDistance(i.region,region2)
-            bestPath = path.slice()
-            region1 = i.region
-        }
-        for (let j of getPossibleRegions(i.time, i.region, false)) {
-            path.push(j)
-            if (checkRegionDistance(j.region,region2) < low) {
+function doTheThing(time, pos1, pos2) {
+    //let pos1 = new LatLng([47.545130, -122.137246])//new LatLng(prompt('Enter position: ').replaceAll("(","").replaceAll(")","").split(","))
+    //let pos2 = new LatLng([47.609165, -122.339078])//new LatLng(prompt('Enter to go: ').replaceAll("(","").replaceAll(")","").split(","))
+    //console.log(pos1);
+    let region1 = pos1.checkRegion() //1125
+    ////console.log(region1);
+    let region2 = pos2.checkRegion()
+    console.log(region1);
+    console.log(region2);
+    let low = Infinity
+    //////console.log(region1 + " TO " + region2)
+    let times = 0
+    let path = []
+    let bestPath = []
+    while (low > 5 && times < 3) {
+        path = bestPath.slice()
+        times++
+        //////console.log('a')
+        let r = getPossibleRegions(time, region1, true)
+        console.log(r.length);
+        ////console.log("***" + tester)
+        ////console.log(r.map(x=>x.region).length);
+        low = Infinity
+        for (let i of r) {
+            //console.log("ii")
+            path.push(i)
+            if (checkRegionDistance(i.region,region2) <= low) {
+                low = checkRegionDistance(i.region,region2)
                 bestPath = path.slice()
-                region1 = j.region
-                low = checkRegionDistance(j.region,region2)
+                region1 = i.region
+            }
+            for (let j of getPossibleRegions(i.time, i.region, false)) {
+                path.push(j)
+                if (checkRegionDistance(j.region,region2) < low) {
+                    bestPath = path.slice()
+                    region1 = j.region
+                    low = checkRegionDistance(j.region,region2)
+                }
+                path.pop()
             }
             path.pop()
         }
-        path.pop()
+        time = bestPath[bestPath.length-1].time;
     }
-    time = bestPath[bestPath.length-1].time;
+    //console.log(bestPath)
+    return {
+        path: bestPath
+    }
 }
-console.log(bestPath)
-////console.log(low)
+//////console.log(low)
 express()
   .use(express.static(patth.join(__dirname, 'public')))
   .set('views', patth.join(__dirname, 'views'))
   .set('view engine', 'ejs')
-  .get('/', (req, res) => res.send(bestPath))
+  .get('/', (req, res) => {
+    let tt = doTheThing(req.query.time, new LatLng(req.query.pos1.split(",").map(val=>parseFloat(val))), new LatLng(req.query.pos2.split(",").map(val=>parseFloat(val))));
+    res.send(JSON.stringify(tt));
+  })
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
