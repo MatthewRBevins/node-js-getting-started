@@ -1,10 +1,11 @@
-const newRegions = require('/newRegions.json')
-const newRoutes = require('/newRoutes.json')
-const newTrips = require('/newTrips.json')
-const regions = require('/fullRegions.json').regions
+const newRegions = require('newRegions.json')
+const newRoutes = require('newRoutes.json')
+const newTrips = require('newTrips.json')
+const regions = require('fullRegions.json').regions
 const fs = require('fs')
 const prompt = require('prompt-sync')()
 const regionSide = 67
+//git commit -am "hi"
 
 function getClosestRegions(region, immediateReturn) {
     //bottom, top, left, right
