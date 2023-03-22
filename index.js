@@ -109,7 +109,7 @@ function getPossibleRegions(time, startingRegion, closestRegions) {
                             //let startTime = newTrips[j.id][startingRegion][0].time
                             //Loop through all xregions that the trip goes to starting from the current region
                             let hasReached = false
-                            let startingTime = null
+                            let startingTime = null 
                             let startingStop = null
                             for (let k of newTrips[j.id].stops) {
                                 if (k.r == parseInt(startingRegion)) {
@@ -203,7 +203,7 @@ express()
   .set('views', patth.join(__dirname, 'views'))
   .set('view engine', 'ejs')
   .get('/', (req, res) => {
-    let tt = doTheThing(req.query.time, new LatLng(req.query.pos1.split(",").map(val=>parseFloat(val))), new LatLng(req.query.pos2.split(",").map(val=>parseFloat(val))));
+    let tt = doTheThing(req.query.time, new LatLng(req.query.pos1.split(",").map(val=>parseFloat(val))), new  LatLng(req.query.pos2.split(",").map(val=>parseFloat(val))));
     res.send(JSON.stringify(tt));
   })
   .listen(PORT, () => console.log(`Listening on ${ PORT }`))
